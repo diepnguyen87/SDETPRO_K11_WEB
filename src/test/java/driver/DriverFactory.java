@@ -23,9 +23,10 @@ public class DriverFactory {
 
         System.setProperty("webdriver.chrome.driver", chromeDriverLocation);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--incognito");
+        options.addArguments("--user-data-dir=/Users/diep.nguyen/Library/Application Support/Google/Chrome/Default");
+        //options.addArguments("--incognito");
 
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         return driver;
