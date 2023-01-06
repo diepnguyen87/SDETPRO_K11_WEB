@@ -3,6 +3,7 @@ package models.components;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@ComponentCssSelector("#login")
 public class LoginFormComponent {
 
     private final WebDriver driver;
