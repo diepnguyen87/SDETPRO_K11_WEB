@@ -18,7 +18,7 @@ public class ExplicitWait implements Urls {
             driver.get(baseUrl.concat(loginSlug));
             By taolaoSel = By.cssSelector("#taolao");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            //wait.until(ExpectedConditions.visibilityOfElementLocated(taolaoSel));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(taolaoSel));
             wait.until(new WaitMoreThanOneTab());
         }catch (Exception e){
             e.printStackTrace();
