@@ -11,12 +11,9 @@ import models.pages.BasePage;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Test;
 import url.Urls;
 
 import java.security.SecureRandom;
@@ -53,11 +50,11 @@ public class FooterTestFlow {
         }
 
         MainMenuComponent randomMainMenuComp = mainMenuComponentList.get(new SecureRandom().nextInt(mainMenuComponentList.size()));
-        String randomCatHref = randomMainMenuComp.getComponent().getAttribute("href");
+        String randomCatHref = randomMainMenuComp.linkElem().getAttribute("href");
         List<SubMenuComponent> subMenuComponentList = randomMainMenuComp.getSubMenuComponentList();
 
         if (subMenuComponentList.isEmpty()) {
-            randomMainMenuComp.link().click();
+            randomMainMenuComp.linkElem().click();
         } else {
             int subMenuRandom = new SecureRandom().nextInt(subMenuComponentList.size());
             SubMenuComponent randomSubMenuComp = subMenuComponentList.get(subMenuRandom);
@@ -67,7 +64,7 @@ public class FooterTestFlow {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            wait.until(ExpectedConditions.urlContains("randomCatHref"));
+            wait.until(ExpectedConditions.urlContains(randomCatHref));
         } catch (TimeoutException e) {
             Assert.fail("[ERROR] - Timeout to wait " + randomCatHref + " is visible");
         }
@@ -75,7 +72,7 @@ public class FooterTestFlow {
     }
 
     private void verifyInformationColumn(FooterColumnComponent footerColumnComponent) {
-        String baseUrl = Urls.baseUrl;
+        String baseUrl = Urls.demoBaseURL;
         List<String> expectedlinkText = Arrays.asList(
                 "Sitemap", "Shipping & Returns", "Privacy Notice", "Conditions of Use", "About us", "Contact us");
         List<String> expectedHrefs = Arrays.asList(
@@ -89,7 +86,7 @@ public class FooterTestFlow {
     }
 
     private void verifyCustomerServiceColumn(FooterColumnComponent footerColumnComponent) {
-        String baseUrl = Urls.baseUrl;
+        String baseUrl = Urls.demoBaseURL;
         List<String> expectedlinkText = Arrays.asList(
                 "Search", "News", "Blog", "Recently viewed products", "Compare products list", "New products");
         List<String> expectedHrefs = Arrays.asList(
@@ -103,7 +100,7 @@ public class FooterTestFlow {
     }
 
     private void verifyAccountColumn(FooterColumnComponent footerColumnComponent) {
-        String baseUrl = Urls.baseUrl;
+        String baseUrl = Urls.demoBaseURL;
         List<String> expectedlinkText = Arrays.asList(
                 "My account", "Orders", "Addresses", "Shopping cart", "Wishlist");
         List<String> expectedHrefs = Arrays.asList(
@@ -116,12 +113,13 @@ public class FooterTestFlow {
     }
 
     private void verifyFollowUsColumn(FooterColumnComponent footerColumnComponent) {
+        String baseUrl = Urls.demoBaseURL;
         List<String> expectedlinkText = Arrays.asList(
                 "Facebook", "Twitter", "RSS", "YouTube", "Google+");
         List<String> expectedHrefs = Arrays.asList(
-                "http://www.facebook.com/nopCommerc",
+                "http://www.facebook.com/nopCommerce",
                 "https://twitter.com/nopCommerce",
-                "https://news/rss/1",
+                baseUrl + "/news/rss/1",
                 "http://www.youtube.com/user/nopCommerce",
                 "https://plus.google.com/+nopcommerce");
         testFooterColumnComponent(footerColumnComponent, expectedlinkText, expectedHrefs);
@@ -141,7 +139,7 @@ public class FooterTestFlow {
             Assert.fail("[ERROR] - actual link text and href are empty!");
         }
 
-        Assert.assertEquals(actualLinkText, expectedlinkText, "[ERROR] - actual and expected link text are difference");
-        Assert.assertEquals(actualHrefs, expectedHrefs, "[ERROR] - actual and expected href are difference");
+        Assert.assertEquals(actualLinkText, expectedlinkText, "[ERROR] actual and expected link text are difference");
+        Assert.assertEquals(actualHrefs, expectedHrefs, "[ERROR] actual and expected href are difference");
     }
 }

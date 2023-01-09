@@ -22,8 +22,8 @@ public class TopMenuComponent extends Component {
     @ComponentCssSelector(value = ".top-menu > li")
     public static class MainMenuComponent extends Component {
 
-        public WebElement link(){
-            return findElement(By.tagName("a"));
+        public WebElement linkElem(){
+            return component.findElement(By.tagName("a"));
         }
         public MainMenuComponent(WebDriver driver, WebElement component) {
             super(driver, component);

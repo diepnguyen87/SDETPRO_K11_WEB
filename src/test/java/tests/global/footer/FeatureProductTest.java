@@ -1,24 +1,21 @@
 package tests.global.footer;
 
 import driver.DriverFactory;
-import models.components.global.footer.CustomerServiceColumnComponent;
-import models.components.global.footer.FooterColumnComponent;
-import models.components.global.footer.InformationColumnComponent;
-import models.components.product.ProductGridComponent;
 import models.components.product.ProductItemComponent;
 import models.pages.HomePage;
 import org.openqa.selenium.WebDriver;
+import tests.BaseTest;
 
 import java.util.List;
 
-public class FeatureProductTest {
+public class FeatureProductTest extends BaseTest {
 
     public static void main(String[] args) {
         WebDriver driver = DriverFactory.getDriver();
         try{
             driver.get("https://demowebshop.tricentis.com");
             testFeatureProductHomePage(driver);
-           
+
         }catch (Exception e){
             e.printStackTrace();
         }
