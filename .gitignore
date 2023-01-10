@@ -11,3 +11,5 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .idea
 .allure-*
+src/test/java/tests.CheckTriangle
+src/test/java/tests.Point
