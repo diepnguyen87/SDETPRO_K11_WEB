@@ -14,6 +14,13 @@ public abstract class ComputerEssentialComponent extends Component {
     public abstract String selectProcessorType(String type);
     public abstract String selectRAMType (String type);
 
+    public String selectHDDType(String hddType){
+        return selectCompOption(hddType);
+    }
+
+    public String selectOSType(String osType){
+        return selectCompOption(osType);
+    }
     protected String selectCompOption(String type){
         String selectorStr = "//label[contains(text(), '" + type + "')]";
         By optionSel = By.xpath(selectorStr);
