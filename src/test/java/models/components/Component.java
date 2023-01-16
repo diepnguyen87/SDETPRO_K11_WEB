@@ -2,12 +2,12 @@ package models.components;
 
 import models.components.product.ComponentxPathSelector;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.time.Duration;
 import java.util.Arrays;
@@ -40,7 +40,6 @@ public class Component {
     public <T extends Component> T findComponent(Class<T> componentClass, WebDriver driver) {
         return findComponents(componentClass, driver).get(0);
     }
-
     public <T extends Component> List<T> findComponents(Class<T> componentClass, WebDriver driver) {
         By componentSelector;
         try {
@@ -83,4 +82,14 @@ public class Component {
         }
     }
 
+    public void scrollUpToElement(WebElement element){
+        scrollToElement("false", element);
+    }
+
+    public void scrollDownToElement(WebElement element){
+        scrollToElement("true", element);
+    }
+    private void scrollToElement(String position, WebElement element){
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(" + position + ");", element);
+    }
 }

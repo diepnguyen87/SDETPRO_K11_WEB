@@ -11,4 +11,5 @@ public class ComputerItemDetailsPage extends BasePage{
     public <T extends ComputerEssentialComponent> T computerComp(Class<T> computerEssentialCompClass ){
         return findComponent(computerEssentialCompClass, driver);
     }
+
 }
