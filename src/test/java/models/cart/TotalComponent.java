@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ComponentCssSelector(".totals .cart-total")
+@ComponentCssSelector(".cart-footer .totals")
 public class TotalComponent extends Component {
 
     private final By priceTableRowSel = By.tagName("tr");
     private final By priceTypeSel = By.cssSelector(".cart-total-left");
     private final By priceValueSel = By.cssSelector(".cart-total-right");
+    private final By tosSel = By.id("termsofservice");
+    private final By checkoutSel = By.id("checkout");
 
     public TotalComponent(WebDriver driver, WebElement component) {
         super(driver, component);
@@ -30,5 +32,13 @@ public class TotalComponent extends Component {
             priceCategories.put(type, value);
         });
         return priceCategories;
+    }
+
+    public void selectTermOfServiceCheckbox(){
+        component.findElement(tosSel).click();
+    }
+
+    public void clickOnCheckoutBtn(){
+        component.findElement(checkoutSel).click();
     }
 }

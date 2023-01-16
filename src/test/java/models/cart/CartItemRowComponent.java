@@ -7,13 +7,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 @ComponentCssSelector(".cart-item-row")
-public class CartItemRow extends Component {
+public class CartItemRowComponent extends Component {
 
     public final By unitPriceSel = By.cssSelector(".unit-price");
     public final By quantitySel = By.cssSelector(".qty-input");
     public final By subTotalSel = By.cssSelector(".subtotal");
 
-    public CartItemRow(WebDriver driver, WebElement component) {
+    public CartItemRowComponent(WebDriver driver, WebElement component) {
         super(driver, component);
     }
 

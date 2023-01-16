@@ -1,6 +1,6 @@
 package models.pages;
 
-import models.cart.CartItemRow;
+import models.cart.CartItemRowComponent;
 import models.cart.TotalComponent;
 import org.openqa.selenium.WebDriver;
 
@@ -12,8 +12,8 @@ public class ShoppingCartPage extends BasePage{
         super(driver);
     }
 
-    public List<CartItemRow> cartItemRowComponents(){
-        return findComponents(CartItemRow.class, driver);
+    public List<CartItemRowComponent> cartItemRowComponents(){
+        return findComponents(CartItemRowComponent.class, driver);
     }
 
     public TotalComponent totalComp(){
