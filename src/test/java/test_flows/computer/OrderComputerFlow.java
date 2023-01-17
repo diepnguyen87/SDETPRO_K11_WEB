@@ -10,6 +10,7 @@ import models.pages.CheckoutPage;
 import models.pages.ComputerItemDetailsPage;
 import models.pages.ShoppingCartPage;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import test_data.CreditCardType;
 import test_data.DataObjectBuilder;
@@ -179,21 +180,24 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         shippingMethodComp.clickOnContinueBtn();
     }
 
-    public void selectPaymentMethod() {
+   /* public void selectPaymentMethod() {
         CheckoutPage checkoutPage = new CheckoutPage(driver);
         PaymentMethodComponent paymentMethodComp = checkoutPage.paymentMethodComp();
         this.paymentMethodType = PaymentMethodType.COD;
         paymentMethodComp.selectCOD();
     }
+*/
+    public void selectPaymentMethod() {
+        List<PaymentMethodType> paymentMethodTypeList = Arrays.asList(PaymentMethodType.values());
+        PaymentMethodType randomPaymentMethodType = paymentMethodTypeList.get(new SecureRandom().nextInt(paymentMethodTypeList.size()));
 
-    public void selectPaymentMethod(PaymentMethodType paymentMethodType) {
-        if (paymentMethodType == null) {
+        if (randomPaymentMethodType == null) {
             throw new IllegalArgumentException("[ERROR] Payment method type can NOT NULL");
         }
-        this.paymentMethodType = paymentMethodType;
+        this.paymentMethodType = randomPaymentMethodType;
         CheckoutPage checkoutPage = new CheckoutPage(driver);
         PaymentMethodComponent paymentMethodComp = checkoutPage.paymentMethodComp();
-        switch (paymentMethodType) {
+        switch (randomPaymentMethodType) {
             case CHECK_MONEY_ORDER:
                 paymentMethodComp.selectCheckMoneyOrder();
                 break;
@@ -209,7 +213,10 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         paymentMethodComp.clickOnContinueBtn();
     }
 
-    public void inputPaymentInfos(CreditCardType creditCardType) {
+    public void inputPaymentInfos() {
+        List<CreditCardType> creditCardTypeList = Arrays.asList(CreditCardType.values());
+        CreditCardType randomCreditCardType= creditCardTypeList.get(new SecureRandom().nextInt(creditCardTypeList.size()));
+
         if (paymentMethodType == null) {
             throw new IllegalArgumentException("[ERROR] Payment method type can NOT NULL");
         }
@@ -218,15 +225,27 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
 
         switch (paymentMethodType) {
             case COD:
+                paymentInformationComp.getPaymentInfos();
                 break;
             case CHECK_MONEY_ORDER:
+                List<WebElement> actualcheckMoneyOrderParaList = paymentInformationComp.getCheckMoneyOrderParaList();
+                List<String> expectedCheckMoneyOrderParaList = new ArrayList<>();
+                expectedCheckMoneyOrderParaList.add("Mail Personal or Business Check, Cashier's Check or money order to:");
+                expectedCheckMoneyOrderParaList.add("Tricentis GmbH\nLeonard-Bernstein-Straße 10\n1220 Vienna\nAustria");
+                expectedCheckMoneyOrderParaList.add("Notice that if you pay by Personal or Business Check, your order may be held for up to 10 days after we receive your check to allow enough time for the check to clear. If you want us to ship faster upon receipt of your payment, then we recommend your send a money order or Cashier's check.");
+                expectedCheckMoneyOrderParaList.add("P.S. You can edit this text from admin panel.");
+                for (int i = 0; i < actualcheckMoneyOrderParaList.size(); i++) {
+                    String actual = actualcheckMoneyOrderParaList.get(i).getText();
+                    String expected = expectedCheckMoneyOrderParaList.get(i);
+                    Assert.assertEquals(actual, expected, "[ERROR]...");
+                }
                 break;
             case CREDIT_CARD:
-                paymentInformationComp.selectCreditCardType(creditCardType);
+                paymentInformationComp.selectCreditCardType(randomCreditCardType);
                 String cardHolderFirstName = defaultCheckoutUser.getFirstName();
                 String cardHolderLastName = defaultCheckoutUser.getLastName();
                 paymentInformationComp.inputCardHolderName(cardHolderFirstName + " " + cardHolderLastName);
-                String cardNumber = getCardNum(creditCardType);
+                String cardNumber = getCardNum(randomCreditCardType);
                 paymentInformationComp.inputCarNum(cardNumber);
                 Calendar calendar = new GregorianCalendar();
                 int currentMonth = calendar.get(Calendar.MONTH) + 1;

@@ -24,8 +24,8 @@ public class BuyingStandardComputerTest extends BaseTest implements Urls {
         orderComputerFlow.inputBillingAddress();
         orderComputerFlow.inputShippingAddress();
         orderComputerFlow.selectShippingMethod();
-        orderComputerFlow.selectPaymentMethod(PaymentMethodType.PURCHASE_ORDER);
-        orderComputerFlow.inputPaymentInfos(CreditCardType.VISA);
+        orderComputerFlow.selectPaymentMethod();
+        orderComputerFlow.inputPaymentInfos();
         orderComputerFlow.confirmOrder();
     }
 

@@ -9,11 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import test_data.CreditCardType;
 
+import java.util.List;
+
 @ComponentCssSelector("#opc-payment_info")
 public class PaymentInformationComponent extends Component {
 
-    private final By purchaseOrderNumSel = By.id("PurchaseOrderNumber");
-    private final By continueBtnSel = By.cssSelector(".button-1.payment-info-next-step-button");
+    private final By infoSel = By.cssSelector(".info p");
 
     private final By creditCardTypeDropdownListSel = By.id("CreditCardType");
     private final By cardHolderNameSel = By.id("CardholderName");
@@ -22,6 +23,10 @@ public class PaymentInformationComponent extends Component {
     private final By expireYearSel = By.id("ExpireYear");
     private final By cardCodeSel = By.id("CardCode");
 
+    private final By purchaseOrderNumSel = By.id("PurchaseOrderNumber");
+    private final By continueBtnSel = By.cssSelector(".button-1.payment-info-next-step-button");
+
+    private final By checkMoneyOrderParaListSel = By.cssSelector(".payment-info .info p");
     public PaymentInformationComponent(WebDriver driver, WebElement component) {
         super(driver, component);
     }
@@ -36,12 +41,12 @@ public class PaymentInformationComponent extends Component {
     }
 
     public void selectCreditCardType(CreditCardType creditCardType) {
-        if(creditCardType == null){
+        if (creditCardType == null) {
             throw new IllegalArgumentException("[ERROR] Credit card type can NOT be NULL");
         }
         WebElement creditCardTypeDropdownListElem = findElement(creditCardTypeDropdownListSel);
         Select select = new Select(creditCardTypeDropdownListElem);
-        switch (creditCardType){
+        switch (creditCardType) {
             case VISA:
                 select.selectByVisibleText("Visa");
                 break;
@@ -79,5 +84,13 @@ public class PaymentInformationComponent extends Component {
 
     public void inputCardCode(String cardCode) {
         findElement(cardCodeSel).sendKeys(cardCode);
+    }
+
+    public String getPaymentInfos(){
+        return findElement(infoSel).getText().trim();
+    }
+
+    public List<WebElement> getCheckMoneyOrderParaList(){
+        return findElements(checkMoneyOrderParaListSel);
     }
 }
