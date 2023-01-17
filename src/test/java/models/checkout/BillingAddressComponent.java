@@ -24,7 +24,7 @@ public class BillingAddressComponent extends Component {
     private final By address1Sel = By.id("BillingNewAddress_Address1");
     private final By zipCodeSel = By.id("BillingNewAddress_ZipPostalCode");
     private final By phoneNoSel = By.id("BillingNewAddress_PhoneNumber");
-    private final By continueSel = By.cssSelector(".button-1.new-address-next-step-button");
+    private final By continueBtnSel = By.cssSelector(".button-1.new-address-next-step-button");
 
     public BillingAddressComponent(WebDriver driver, WebElement component) {
         super(driver, component);
@@ -78,7 +78,7 @@ public class BillingAddressComponent extends Component {
     }
 
     public void clickContinueBtn(){
-        findElement(continueSel).click();
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(continueSel));
+        findElement(continueBtnSel).click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(continueBtnSel));
     }
 }

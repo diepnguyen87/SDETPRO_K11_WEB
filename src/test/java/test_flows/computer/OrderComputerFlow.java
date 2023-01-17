@@ -2,9 +2,7 @@ package test_flows.computer;
 
 import models.cart.CartItemRowComponent;
 import models.cart.TotalComponent;
-import models.checkout.BillingAddressComponent;
-import models.checkout.ShippingAddressComponent;
-import models.checkout.ShippingMethodComponent;
+import models.checkout.*;
 import models.components.global.header.HeaderComponent;
 import models.components.order.ComputerEssentialComponent;
 import models.pages.CheckoutOptionsPage;
@@ -13,15 +11,14 @@ import models.pages.ComputerItemDetailsPage;
 import models.pages.ShoppingCartPage;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import test_data.CreditCardType;
 import test_data.DataObjectBuilder;
+import test_data.PaymentMethodType;
 import test_data.computer.ComputerData;
 import test_data.user.User;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +30,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
     private int quantity;
 
     public User defaultCheckoutUser;
+    public PaymentMethodType paymentMethodType;
 
     public OrderComputerFlow(WebDriver driver, Class<T> computerEssentialComponent, ComputerData computerData) {
         this.driver = driver;
@@ -40,6 +38,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         this.computerData = computerData;
         this.quantity = 1;
     }
+
     public OrderComputerFlow(WebDriver driver, Class<T> computerEssentialComponent, ComputerData computerData, int quantity) {
         this.driver = driver;
         this.computerEssentialComponent = computerEssentialComponent;
@@ -47,7 +46,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         this.quantity = quantity;
     }
 
-    public void buildCompSpecAndAddToCart(){
+    public void buildCompSpecAndAddToCart() {
         ComputerItemDetailsPage computerItemDetailsPage = new ComputerItemDetailsPage(driver);
         T computerEssentialComp = computerItemDetailsPage.computerComp(computerEssentialComponent);
 
@@ -66,7 +65,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         //System.out.println("HDD additional price: " + hddAdditionalPrice);
 
         double osAdditionalPrice = 0;
-        if(computerData.getOs() != null){
+        if (computerData.getOs() != null) {
             String fullOSStr = computerEssentialComp.selectOSType(computerData.getOs());
             osAdditionalPrice = extractAdditionalPrice(fullOSStr);
             //System.out.println("OS additional price: " + osAdditionalPrice);
@@ -83,14 +82,15 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         headerComponent.navigateToShoppingCartPage();
         try {
             Thread.sleep(3000);
-        } catch (Exception ignore){}
+        } catch (Exception ignore) {
+        }
     }
 
-    private double extractAdditionalPrice(String itemStr){
+    private double extractAdditionalPrice(String itemStr) {
         double price = 0;
         Pattern pattern = Pattern.compile("\\[(.*?)\\]");
         Matcher matcher = pattern.matcher(itemStr);
-        if(matcher.find()){
+        if (matcher.find()) {
             price = Double.parseDouble(matcher.group(1).replaceAll("[+-]", ""));
         }
         return price;
@@ -99,7 +99,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
     public void verifyShoppingCart() {
         ShoppingCartPage shoppingCartPage = new ShoppingCartPage(driver);
         List<CartItemRowComponent> cartItemRowList = shoppingCartPage.cartItemRowComponents();
-        if (cartItemRowList.isEmpty()){
+        if (cartItemRowList.isEmpty()) {
             Assert.fail("[ERROR] - No item in shopping cart");
         }
 
@@ -119,13 +119,13 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         double checkoutSubTotal = 0;
         double checkoutOtherFeesTotal = 0;
         double checkoutTotal = 0;
-        for(String priceType : totalCompMap.keySet()){
+        for (String priceType : totalCompMap.keySet()) {
             double priceValue = totalCompMap.get(priceType);
-            if(priceType.startsWith("Sub-Total")){
+            if (priceType.startsWith("Sub-Total")) {
                 checkoutSubTotal = priceValue;
-            }else if(priceType.startsWith("Total")){
+            } else if (priceType.startsWith("Total")) {
                 checkoutTotal = priceValue;
-            }else{
+            } else {
                 checkoutOtherFeesTotal += priceValue;
             }
             System.out.println(priceType + ": " + totalCompMap.get(priceType));
@@ -135,7 +135,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         Assert.assertEquals(checkoutTotal, (checkoutSubTotal + checkoutOtherFeesTotal), "[ERROR] ...");
     }
 
-    public void agreeTOSAndCheckout(){
+    public void agreeTOSAndCheckout() {
         ShoppingCartPage shoppingCartPage = new ShoppingCartPage(driver);
         TotalComponent totalComponent = shoppingCartPage.totalComp();
         totalComponent.selectTermOfServiceCheckbox();
@@ -143,7 +143,7 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         new CheckoutOptionsPage(driver).checkoutAsGuest();
     }
 
-    public void inputBillingAddress(){
+    public void inputBillingAddress() {
         String defaultCheckoutUserJsonLoc = "/src/test/java/test_data/DefaultCheckoutUser.json";
         defaultCheckoutUser = DataObjectBuilder.buildDataObjectFrom(defaultCheckoutUserJsonLoc, User.class);
 
@@ -163,13 +163,13 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         billingAddressComp.clickContinueBtn();
     }
 
-    public void inputShippingAddress(){
+    public void inputShippingAddress() {
         CheckoutPage checkoutPage = new CheckoutPage(driver);
         ShippingAddressComponent shippingAddressComp = checkoutPage.shippingAddressComp();
         shippingAddressComp.clickOnContinueBtn();
     }
 
-    public void selectShippingMethod(){
+    public void selectShippingMethod() {
         List<String> shipppingMethod = Arrays.asList("Ground", "Next Day Air", "2nd Day Air");
         String randomShippingMethod = shipppingMethod.get(new SecureRandom().nextInt(shipppingMethod.size()));
 
@@ -179,15 +179,91 @@ public class OrderComputerFlow<T extends ComputerEssentialComponent> {
         shippingMethodComp.clickOnContinueBtn();
     }
 
-    public void selectPaymentMethod(){
-
+    public void selectPaymentMethod() {
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
+        PaymentMethodComponent paymentMethodComp = checkoutPage.paymentMethodComp();
+        this.paymentMethodType = PaymentMethodType.COD;
+        paymentMethodComp.selectCOD();
     }
 
-    public void selectPaymentInfos(){
-
+    public void selectPaymentMethod(PaymentMethodType paymentMethodType) {
+        if (paymentMethodType == null) {
+            throw new IllegalArgumentException("[ERROR] Payment method type can NOT NULL");
+        }
+        this.paymentMethodType = paymentMethodType;
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
+        PaymentMethodComponent paymentMethodComp = checkoutPage.paymentMethodComp();
+        switch (paymentMethodType) {
+            case CHECK_MONEY_ORDER:
+                paymentMethodComp.selectCheckMoneyOrder();
+                break;
+            case CREDIT_CARD:
+                paymentMethodComp.selectCreditCard();
+                break;
+            case PURCHASE_ORDER:
+                paymentMethodComp.selectPurchaseOrder();
+                break;
+            default:
+                paymentMethodComp.selectCOD();
+        }
+        paymentMethodComp.clickOnContinueBtn();
     }
 
-    public void confirmOrder(){
+    public void inputPaymentInfos(CreditCardType creditCardType) {
+        if (paymentMethodType == null) {
+            throw new IllegalArgumentException("[ERROR] Payment method type can NOT NULL");
+        }
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
+        PaymentInformationComponent paymentInformationComp = checkoutPage.paymentInformationCom();
 
+        switch (paymentMethodType) {
+            case COD:
+                break;
+            case CHECK_MONEY_ORDER:
+                break;
+            case CREDIT_CARD:
+                paymentInformationComp.selectCreditCardType(creditCardType);
+                String cardHolderFirstName = defaultCheckoutUser.getFirstName();
+                String cardHolderLastName = defaultCheckoutUser.getLastName();
+                paymentInformationComp.inputCardHolderName(cardHolderFirstName + " " + cardHolderLastName);
+                String cardNumber = getCardNum(creditCardType);
+                paymentInformationComp.inputCarNum(cardNumber);
+                Calendar calendar = new GregorianCalendar();
+                int currentMonth = calendar.get(Calendar.MONTH) + 1;
+                int currentYear = calendar.get(Calendar.YEAR) + 1;
+                paymentInformationComp.selectExpireMonth(String.format("%02d", currentMonth));
+                paymentInformationComp.selectExpireYear(String.valueOf(currentYear));
+                paymentInformationComp.inputCardCode("123");
+                break;
+            case PURCHASE_ORDER:
+                paymentInformationComp.inputPurchaseOrderNumber("PO123456789");
+                break;
+        }
+        paymentInformationComp.clickOnContinueBtn();
+    }
+
+    private String getCardNum(CreditCardType creditCardType) {
+        String cardNum = "";
+        switch (creditCardType) {
+            case VISA:
+                cardNum = "4012888888881881";
+                break;
+            case MASTER:
+                cardNum = "5105105105105100";
+                break;
+            case AMEX:
+                cardNum = "378282246310005";
+                break;
+            case DISCOVER:
+                cardNum = "6011000990139424";
+                break;
+        }
+        return cardNum;
+    }
+
+    public void confirmOrder() {
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
+        ConfirmOrderComponent confirmOrderComp = checkoutPage.confirmOrderComp();
+        confirmOrderComp.clickOnContinueBtn();
     }
 }
