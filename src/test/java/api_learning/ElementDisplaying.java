@@ -6,13 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import tests.BaseTest;
 
 import java.util.List;
 
-public class ElementDisplaying {
+public class ElementDisplaying extends BaseTest {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try {
             //Get chrome driver
             driver.get("https://the-internet.herokuapp.com/login");

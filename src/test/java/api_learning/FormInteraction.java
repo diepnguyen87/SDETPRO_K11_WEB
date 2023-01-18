@@ -4,11 +4,11 @@ import driver.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import tests.BaseTest;
 
-public class FormInteraction {
+public class FormInteraction extends BaseTest {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try {
             //Get chrome driver
             driver.get("https://the-internet.herokuapp.com/login");

@@ -3,12 +3,12 @@ package pom_tests;
 import driver.DriverFactory;
 import models.pages.LoginPageMode01;
 import org.openqa.selenium.WebDriver;
+import tests.BaseTest;
 import url.Urls;
 
-public class LoginTestMode01 implements Urls {
+public class LoginTestMode01 extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try {
             driver.get(baseUrl.concat(loginSlug));
             LoginPageMode01 loginPage = new LoginPageMode01(driver);

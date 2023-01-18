@@ -7,11 +7,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import tests.BaseTest;
 import url.Urls;
 
 import java.time.Duration;
 
-public class JavaScriptAlert implements Urls {
+public class JavaScriptAlert extends BaseTest implements Urls {
 
     private final static By jsAlertSel = By.cssSelector("[onclick='jsAlert()']");
     private final static By jsConfirmSel = By.cssSelector("[onclick='jsConfirm()']");
@@ -19,7 +20,6 @@ public class JavaScriptAlert implements Urls {
     private final static By resultSel = By.id("result");
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try {
             driver.get(baseUrl.concat(jScriptSlug));
 

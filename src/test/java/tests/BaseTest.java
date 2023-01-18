@@ -10,35 +10,45 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 public class BaseTest {
 
     protected static WebDriver driver;
+    private List<DriverFactory> webdriverThreadPool = Collections.synchronizedList(new ArrayList<>());
+    private ThreadLocal<DriverFactory> driverThread;
+    private String browser;
 
-    @BeforeTest
-    public void initBrowserSession(){
-        driver = DriverFactory.getDriver();
+    @BeforeTest(description = "init browser session")
+    @Parameters("browser")
+    public void initBrowserSession(String browser) {
+        this.browser = browser;
+        driverThread = ThreadLocal.withInitial(() -> {
+            DriverFactory driverFactory = new DriverFactory();
+            webdriverThreadPool.add(driverFactory);
+            return driverFactory;
+        });
+        driver = driverThread.get().getDriver(browser);
     }
 
     @AfterTest(alwaysRun = true)
-    public void closeBrowserSession(){
-        if(driver != null){
+    public void closeBrowserSession() {
+        if (driver != null) {
             driver.quit();
         }
     }
 
     @AfterMethod
-    public void captureScreenshot(ITestResult result){
+    public void captureScreenshot(ITestResult result) {
         //Capture screenshot with name MethodName-y-m-d-h-m-s.png
-        if(result.getStatus() == ITestResult.FAILURE){
+        if (result.getStatus() == ITestResult.FAILURE) {
             //1. Get Method Name
             String methodName = result.getName();
 
@@ -55,19 +65,19 @@ public class BaseTest {
             String screenshotName = methodName + "-" + y + "-" + m + "-" + d + "-" + h + "-" + mins + "-" + s + ".png";
 
             //4. Take screenshot
-            File screenshotBase64Data = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+            File screenshotBase64Data = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
             //5. Save to local
-            try{
+            try {
                 String screenshotLocation = System.getProperty("user.dir") + "/screenshots" + screenshotName;
                 FileUtils.copyFile(screenshotBase64Data, new File(screenshotLocation));
 
                 //6. Attach to allure report
                 Path path = Paths.get(screenshotLocation);
-                try(InputStream inputStream = Files.newInputStream(path)) {
+                try (InputStream inputStream = Files.newInputStream(path)) {
                     Allure.addAttachment(methodName, inputStream);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

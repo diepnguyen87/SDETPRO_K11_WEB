@@ -6,14 +6,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import support.ui.WaitMoreThanOneTab;
+import tests.BaseTest;
 import url.Urls;
 
 import java.time.Duration;
 
-public class ExplicitWait implements Urls {
+public class ExplicitWait extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try{
             driver.get(baseUrl.concat(loginSlug));
             By taolaoSel = By.cssSelector("#taolao");

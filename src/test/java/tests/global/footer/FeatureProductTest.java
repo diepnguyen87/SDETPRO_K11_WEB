@@ -11,7 +11,6 @@ import java.util.List;
 public class FeatureProductTest extends BaseTest {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try{
             driver.get("https://demowebshop.tricentis.com");
             testFeatureProductHomePage(driver);

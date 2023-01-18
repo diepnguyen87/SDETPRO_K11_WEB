@@ -8,14 +8,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import support.ui.WaitElementEnabled;
+import tests.BaseTest;
 import url.Urls;
 
 import java.time.Duration;
 
-public class DynamicControl implements Urls {
+public class DynamicControl extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try{
             driver.get(baseUrl.concat(dynamicControlSlug));
 

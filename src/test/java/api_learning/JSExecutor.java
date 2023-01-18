@@ -1,13 +1,11 @@
 package api_learning;
 
-import driver.DriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import tests.BaseTest;
 import url.Urls;
 
-public class JSExecutor implements Urls {
+public class JSExecutor extends BaseTest implements Urls {
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try{
             driver.get(baseUrl.concat(floatingMenuSlug));
             Thread.sleep(5000);

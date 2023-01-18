@@ -5,12 +5,12 @@ import models.components.LoginFormComponent;
 import models.pages.LoginPageMode02;
 import models.pages.LoginPageMode03;
 import org.openqa.selenium.WebDriver;
+import tests.BaseTest;
 import url.Urls;
 
-public class LoginTestMode03 implements Urls {
+public class LoginTestMode03 extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
         try {
             driver.get(baseUrl.concat(loginSlug));
             LoginPageMode03 loginPage = new LoginPageMode03(driver);

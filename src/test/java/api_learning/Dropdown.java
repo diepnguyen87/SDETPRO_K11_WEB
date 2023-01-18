@@ -6,12 +6,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import support.ui.SelectEx;
+import tests.BaseTest;
 import url.Urls;
 
-public class Dropdown implements Urls {
+public class Dropdown extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
 
         try {
             driver.get(baseUrl.concat(dropdownSlug));

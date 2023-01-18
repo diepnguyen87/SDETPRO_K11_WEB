@@ -1,18 +1,16 @@
 package api_learning;
 
-import driver.DriverFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import tests.BaseTest;
 import url.Urls;
 
 import java.util.List;
 
-public class MouseHoverAndNarrowDownSearching implements Urls {
+public class MouseHoverAndNarrowDownSearching extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
 
         try {
             driver.get(baseUrl.concat(hoverSlug));

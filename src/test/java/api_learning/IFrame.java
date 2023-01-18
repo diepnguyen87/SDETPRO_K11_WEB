@@ -4,12 +4,12 @@ import driver.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import tests.BaseTest;
 import url.Urls;
 
-public class IFrame implements Urls {
+public class IFrame extends BaseTest implements Urls {
 
     public static void main(String[] args) {
-        WebDriver driver = DriverFactory.getDriver();
 
         try {
             driver.get(baseUrl.concat(iframeSlug));
