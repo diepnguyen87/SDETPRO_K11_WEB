@@ -1,0 +1,1 @@
+{"uuid":"ba78fb76-1859-4d43-8e1b-f8b5cc04c93e","name":"Group 2","children":[],"befores":[],"afters":[{"name":"closeBrowserSession","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1674219851806,"stop":1674219851812}],"start":1674219851738,"stop":1674219851814}
