@@ -83,13 +83,16 @@ public class Main {
         //add all tests into suite
         boolean isTestingSafari = browser.equalsIgnoreCase("safari");
         suite.setTests(allTest);
-        suite.setParallel(XmlSuite.ParallelMode.TESTS);
-        suite.setThreadCount(isTestingSafari ? 1 : MAX_PARALLEL_SESSION);
+
+        if(!isTestingSafari){
+            suite.setParallel(XmlSuite.ParallelMode.TESTS);
+            suite.setThreadCount(isTestingSafari ? 1 : MAX_PARALLEL_SESSION);
+        }
 
         //Run a group of test
-        if(isTestingSafari){
+       /* if(isTestingSafari){
             suite.addIncludedGroup("smoke");
-        }
+        }*/
         System.out.println(suite.toXml());
 
         //add suite into suite list
