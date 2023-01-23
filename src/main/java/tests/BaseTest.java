@@ -39,7 +39,6 @@ public class BaseTest {
             webdriverThreadPool.add(driverFactory);
             return driverFactory;
         });
-        //driver = driverThread.get().getDriver(browser);
     }
 
     @AfterTest(alwaysRun = true)
